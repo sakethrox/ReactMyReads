@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import './App.css'
+import Book from './Book'
 
 
 class ListBooks extends Component {
@@ -8,14 +9,18 @@ class ListBooks extends Component {
             //at this time, I don't see a need for state...
     }
 
+    handleShelfChange(book, event){
+        this.props.shelfchange(book,event);
+    }
+
     render(){
 
         let books = this.props.books;
         let currentlyReading, wantToRead, read;
         if(books.length > 0){
-            currentlyReading = books.filter(book => book.shelf == 'currentlyReading');
-            wantToRead = books.filter(book => book.shelf == 'wantToRead');
-            read = books.filter(book => book.shelf == 'read');
+            currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
+            wantToRead = books.filter(book => book.shelf === 'wantToRead');
+            read = books.filter(book => book.shelf === 'read');
         }
 
 
@@ -27,24 +32,7 @@ class ListBooks extends Component {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {currentlyReading && currentlyReading.map(book => (
-                                    <li>
-                                        <div className="book">
-                                            <div className="book-top">
-                                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                                                <div className="book-shelf-changer">
-                                                    <select>
-                                                        <option value="move" disabled>Move to...</option>
-                                                        <option value="currentlyReading">Currently Reading</option>
-                                                        <option value="wantToRead">Want to Read</option>
-                                                        <option value="read">Read</option>
-                                                        <option value="none">None</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className="book-title">{book.title}</div>
-                                            <div className="book-authors">{book.authors[0]}</div>
-                                        </div>
-                                    </li>
+                                    <Book key={book.id} book={book} handleChange={(event) =>{this.handleShelfChange(book, event)}}/>
                                 ))}
                             </ol>
                         </div>
@@ -54,24 +42,7 @@ class ListBooks extends Component {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {wantToRead && wantToRead.map(book => (
-                                    <li>
-                                        <div className="book">
-                                            <div className="book-top">
-                                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                                                <div className="book-shelf-changer">
-                                                    <select>
-                                                        <option value="move" disabled>Move to...</option>
-                                                        <option value="currentlyReading">Currently Reading</option>
-                                                        <option value="wantToRead">Want to Read</option>
-                                                        <option value="read">Read</option>
-                                                        <option value="none">None</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className="book-title">{book.title}</div>
-                                            <div className="book-authors">{book.authors[0]}</div>
-                                        </div>
-                                    </li>
+                                    <Book key={book.id} book={book}  handleChange= {(event) =>{this.handleShelfChange(book, event)}}/>
                                 ))}
                             </ol>
                         </div>
@@ -81,24 +52,7 @@ class ListBooks extends Component {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {read && read.map(book => (
-                                    <li>
-                                        <div className="book">
-                                            <div className="book-top">
-                                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                                                <div className="book-shelf-changer">
-                                                    <select>
-                                                        <option value="move" disabled>Move to...</option>
-                                                        <option value="currentlyReading">Currently Reading</option>
-                                                        <option value="wantToRead">Want to Read</option>
-                                                        <option value="read">Read</option>
-                                                        <option value="none">None</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className="book-title">{book.title}</div>
-                                            <div className="book-authors">{book.authors[0]}</div>
-                                        </div>
-                                    </li>
+                                    <Book key={book.id} book={book} handleChange= {(event,title) =>{this.handleShelfChange(book,event)}}/>
                                 ))}
                             </ol>
                         </div>
@@ -107,10 +61,6 @@ class ListBooks extends Component {
             </div>
         )
     }
-
-
-
-
 }
 
 export default ListBooks

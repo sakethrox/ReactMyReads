@@ -22,6 +22,14 @@ class BooksApp extends React.Component {
 
   }
 
+  shelfChange(book,event){
+        book.shelf = event.target.value
+        let data = this.state.books.filter((data) => book.id !== data.id)
+        this.setState({
+            books: [...data,book]
+        })
+  }
+
   render() {
     return (
       <div className="app">
@@ -51,7 +59,7 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <ListBooks books={this.state.books}/>
+            <ListBooks books={this.state.books} shelfchange={(book,event) => this.shelfChange(book,event)}/>
             <div className="open-search">
               <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
             </div>
