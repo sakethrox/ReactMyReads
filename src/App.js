@@ -2,6 +2,7 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import ListBooks from './ListBooks'
+import Book from "./Book";
 
 class BooksApp extends React.Component {
 
@@ -14,6 +15,8 @@ class BooksApp extends React.Component {
      */
     showSearchPage: false,
     books: '',
+    query: '',
+    searchList: '',
   }
 
   componentDidMount(){
@@ -30,8 +33,23 @@ class BooksApp extends React.Component {
         })
   }
 
+  updateQuery(value){
+      this.setState({
+          query: value
+      })
+
+      BooksAPI.search(value).then((data) =>  {
+          if(data && data["error"]){
+              alert('Invalid search!')
+          }
+          else{
+              this.setState({searchList:data})
+          }}) //
+  }
+
   render() {
     return (
+
       <div className="app">
         {this.state.showSearchPage ? (
           <div className="search-books">
@@ -46,12 +64,16 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={event => this.updateQuery(event.target.value)}/>
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                  {this.state.searchList && this.state.searchList.map((book) =>
+                    <Book key={book.id} book={book} handleChange={(event) =>{this.shelfChange(book, event)}}/>
+                  )}
+              </ol>
             </div>
           </div>
         ) : (
@@ -65,9 +87,9 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )}
+
       </div>
     )
   }
 }
-
 export default BooksApp

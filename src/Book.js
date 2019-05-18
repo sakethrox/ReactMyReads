@@ -3,6 +3,7 @@ import './App.css'
 
 function Book(props){
 
+
     return (
         <li>
             <div className="book">
@@ -18,8 +19,11 @@ function Book(props){
                         </select>
                     </div>
                 </div>
-                <div className="book-title">{props.book.title}</div>
-                <div className="book-authors">{props.book.authors[0]}</div>
+                {1==2 && <div>Hello</div>}
+                {props.book.title && <div className="book-title">{props.book.title}</div>}
+                {props.book.authors && <div className="book-authors">{props.book.authors[0]}</div>}
+
+
             </div>
         </li>
     )
